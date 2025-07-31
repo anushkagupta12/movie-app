@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import MovieCard from './components/MovieCard';
-import SortDropdown from './components/SortDropdown';
+import SortDropdown from './components/SortDropDown';
 import MovieDetails from './components/MovieDetails';
 
 const App = () => {
