@@ -10,6 +10,7 @@ const App = () => {
     upcoming: [],
     search: [],
     single: [],
+    all: [], 
   });
 
   const [sortOption, setSortOption] = useState('');
@@ -30,18 +31,30 @@ const App = () => {
       fetchCategory('top_rated'),
       fetchCategory('upcoming'),
     ]);
-    setMovies({ popular, top_rated: topRated, upcoming, search: [], single: [] });
+
+    
+    const combined = [...popular, ...topRated, ...upcoming];
+    const uniqueMovies = Array.from(new Map(combined.map((m) => [m.id, m])).values());
+
+    setMovies({
+      popular,
+      top_rated: topRated,
+      upcoming,
+      search: [],
+      single: [],
+      all: uniqueMovies,
+    });
   };
 
   const fetchSearchResults = async () => {
     const res = await fetch(`https://api.themoviedb.org/3/search/movie?query=${search}&api_key=${apiKey}`);
     const data = await res.json();
-    setMovies({ popular: [], top_rated: [], upcoming: [], search: data.results || [], single: [] });
+    setMovies({ popular: [], top_rated: [], upcoming: [], search: data.results || [], single: [], all: [] });
   };
 
   const fetchSingleCategory = async (category) => {
     const data = await fetchCategory(category);
-    setMovies({ popular: [], top_rated: [], upcoming: [], search: [], single: data });
+    setMovies({ popular: [], top_rated: [], upcoming: [], search: [], single: data, all: [] });
   };
 
   useEffect(() => {
@@ -100,13 +113,9 @@ const App = () => {
       ) : (
         <>
           {search && renderSection(`Results for "${search}"`, movies.search)}
-          {!search && !sortOption && (
-            <>
-              {renderSection('', movies.popular)}
-              {renderSection('', movies.top_rated)}
-              {renderSection('', movies.upcoming)}
-            </>
-          )}
+
+          {!search && !sortOption && renderSection('', movies.all)}
+
           {!search && sortOption && renderSection(sortOption.replace('_', ' ').toUpperCase(), movies.single)}
         </>
       )}
