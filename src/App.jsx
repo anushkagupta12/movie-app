@@ -102,9 +102,9 @@ const App = () => {
           {search && renderSection(`Results for "${search}"`, movies.search)}
           {!search && !sortOption && (
             <>
-              {renderSection('Popular', movies.popular)}
-              {renderSection('Top Rated', movies.top_rated)}
-              {renderSection('Upcoming', movies.upcoming)}
+              {renderSection('', movies.popular)}
+              {renderSection('', movies.top_rated)}
+              {renderSection('', movies.upcoming)}
             </>
           )}
           {!search && sortOption && renderSection(sortOption.replace('_', ' ').toUpperCase(), movies.single)}
